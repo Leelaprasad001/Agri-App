@@ -1,0 +1,69 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+*.pyo
+
+Models/
+Notebooks/
+Data/
+
+# Virtual environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Jupyter Notebook files
+.ipynb_checkpoints
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+*.egg
+
+# Pytest
+.cache
+*.cover
+*.log
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+.pytype/
+
+# IDE specific files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Python env files
+.env
+.env.local
+.env.production
+.env.test
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
