@@ -1,0 +1,13 @@
+# Ignore documentation files
+*.md
+
+# Ignore test and unnecessary development files
+tests/
+docker-compose.yml
+.dockerignore
+
+# Ignore model files in the slug since they will be downloaded externally
+*.h5
+*.pkl
+
+

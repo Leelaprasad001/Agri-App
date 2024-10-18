@@ -4,8 +4,32 @@ __pycache__/
 *.pyo
 
 Models/
+APP/
 Notebooks/
 Data/
+temporary/
+static/
+templates/
+
+
+
+
+# Ignore model files
+*.h5
+*.pkl
+*.json
+
+# Ignore unnecessary local files
+__pycache__/
+*.pyc
+logs/
+datasets/
+static/uploads/
+
+# Ignore Docker-related files if you use Docker locally
+docker-compose.yml
+.dockerignore
+
 
 # Virtual environment
 venv/

@@ -1,1 +1,1 @@
-Agricultural APP
+Agri App

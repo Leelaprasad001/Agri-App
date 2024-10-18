@@ -3,18 +3,18 @@ import os
 import json
 import pickle
 
-import numpy as np
-from PIL import Image
+import numpy as np # type: ignore
+from PIL import Image # type: ignore
 
-import tensorflow as tf
+import tensorflow as tf # type: ignore
 from keras.models import load_model # type: ignore
 
 
-from fastapi import FastAPI, UploadFile, File, HTTPException, Request
-from fastapi.responses import HTMLResponse, JSONResponse
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, UploadFile, File, HTTPException, Request # type: ignore
+from fastapi.responses import HTMLResponse, JSONResponse # type: ignore
+from fastapi.staticfiles import StaticFiles # type: ignore
+from fastapi.templating import Jinja2Templates # type: ignore
+from fastapi.middleware.cors import CORSMiddleware # type: ignore
 
 
 # Set the environment variable to disable oneDNN custom operations
@@ -39,29 +39,19 @@ app.add_middleware(
 
 # Load the Crop Disease Prediction model
 working_dir = os.path.dirname(os.path.abspath(__file__))
-crop_disease_model_path = os.path.join(working_dir, 'Models', 'Crop Disease Prediction model.h5')
+crop_disease_model_path = os.path.join(working_dir, 'Crop_Disease_Prediction_model.h5')
 crop_disease_model = load_model(crop_disease_model_path)
 
 # Load the class names for the crop disease prediction model
-class_indices_path = os.path.join(working_dir, 'Data', 'class_indices.json')
+class_indices_path = os.path.join(working_dir,'class_indices.json')
 with open(class_indices_path, 'r') as f:
     class_indices = json.load(f)
 
 # Load the Crop Recommendation System model
-crop_recommendation_model_path = os.path.join(working_dir, 'Models', 'DecisionTree.pkl')
+crop_recommendation_model_path = os.path.join(working_dir,'DecisionTree.pkl')
 with open(crop_recommendation_model_path, 'rb') as model_file:
     crop_recommendation_model = pickle.load(model_file)
 
-# Set up static files and templates
-app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
-
-# Preprocess image for crop disease prediction
-"""def preprocess_image(image: Image.Image):
-    image = image.resize((224, 224))
-    image = np.array(image)
-    image = np.expand_dims(image, axis=0)
-    return image"""
 
 def preprocess_image(image):
     # Example preprocessing steps (modify as needed)
@@ -71,13 +61,10 @@ def preprocess_image(image):
     image_array = np.expand_dims(image_array, axis=0)  # Add batch dimension
     return image_array
 
-@app.get("/", response_class=HTMLResponse)
-async def index(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
 
 # Crop Disease Prediction Route
 @app.post("/predict")
-async def predict(request: Request, file: UploadFile = File(...)):
+async def predict_disease(request: Request, file: UploadFile = File(...)):
     if not file.filename:
         raise HTTPException(status_code=400, detail="No selected file")
 
@@ -127,5 +114,9 @@ async def recommend_crop(data: dict):
         raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == '__main__':
-    import uvicorn
+    import uvicorn # type: ignore
     uvicorn.run(app, host="0.0.0.0", port=8000)
+
+
+
+

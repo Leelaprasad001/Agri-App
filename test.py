@@ -39,28 +39,25 @@ app.add_middleware(
 
 # Load the Crop Disease Prediction model
 working_dir = os.path.dirname(os.path.abspath(__file__))
-crop_disease_model_path = os.path.join(working_dir, 'Models', 'Crop Disease Prediction model.h5')
+crop_disease_model_path = os.path.join(working_dir, 'Crop_Disease_Prediction_model.h5')
 crop_disease_model = load_model(crop_disease_model_path)
 
 # Load the class names for the crop disease prediction model
-class_indices_path = os.path.join(working_dir, 'Data', 'class_indices.json')
+class_indices_path = os.path.join(working_dir,'class_indices.json')
 with open(class_indices_path, 'r') as f:
     class_indices = json.load(f)
 
 # Load the Crop Recommendation System model
-crop_recommendation_model_path = os.path.join(working_dir, 'Models', 'DecisionTree.pkl')
+crop_recommendation_model_path = os.path.join(working_dir, 'DecisionTree.pkl')
 with open(crop_recommendation_model_path, 'rb') as model_file:
     crop_recommendation_model = pickle.load(model_file)
-
-# Set up static files and templates
-app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
 
 
 def preprocess_image(image):
     image = image.resize((224, 224))  # Resize to the expected input size of the model
     image_array = np.array(image)     # Convert to numpy array
     image_array = image_array / 255.0 # Normalize pixel values to [0, 1]
+    image_array = tf.cast(image_array, tf.float16)  # convert in to float16
     image_array = np.expand_dims(image_array, axis=0)  # Add batch dimension
     return image_array
 
@@ -74,22 +71,9 @@ class CropRecommendationData(BaseModel):
     ph: float
     rainfall: float
 
-
-@app.get("/", response_class=HTMLResponse)
-async def index(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
-
-
-
-# Serve the favicon.ico file
-@app.get("/favicon.ico", include_in_schema=False)
-async def favicon():
-    return FileResponse(os.path.join(working_dir, 'static', 'favicon.ico'))
-
-
 # Crop Disease Prediction Route
 @app.post("/predict")
-async def predict(file: UploadFile = File(...)):
+async def predict_disease(file: UploadFile = File(...)):
     if not file.filename:
         raise HTTPException(status_code=400, detail="No selected file")
 
@@ -134,3 +118,4 @@ async def recommend_crop(data: CropRecommendationData):
 if __name__ == '__main__':
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
+    
