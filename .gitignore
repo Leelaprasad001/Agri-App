@@ -4,12 +4,9 @@ __pycache__/
 *.pyo
 
 Models/
-APP/
+app/
 Notebooks/
 Data/
-temporary/
-static/
-templates/
 temporary/
 
 

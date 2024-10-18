@@ -36,13 +36,8 @@ Data/
 Models/
 Notebooks/
 
-static/
-templates/
 
 temporary/
-
-
-
 
 # Ignore any other unnecessary files or directories
 tests/

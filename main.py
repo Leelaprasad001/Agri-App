@@ -9,16 +9,27 @@ from PIL import Image # type: ignore
 import tensorflow as tf # type: ignore
 from keras.models import load_model # type: ignore
 
+from fastapi import FastAPI # type: ignore
+from fastapi.staticfiles import StaticFiles # type: ignore
+
+import numpy as np # type: ignore
+from PIL import Image # type: ignore
+
+import tensorflow as tf # type: ignore
+from keras.models import load_model # type: ignore
 
 from fastapi import FastAPI, UploadFile, File, HTTPException, Request # type: ignore
-from fastapi.responses import HTMLResponse, JSONResponse # type: ignore
 from fastapi.staticfiles import StaticFiles # type: ignore
+from fastapi.responses import HTMLResponse, JSONResponse # type: ignore
 from fastapi.templating import Jinja2Templates # type: ignore
 from fastapi.middleware.cors import CORSMiddleware # type: ignore
 
 
+
 # Set the environment variable to disable oneDNN custom operations
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
+
+
 
 app = FastAPI()
 
@@ -60,6 +71,17 @@ def preprocess_image(image):
     image_array = image_array / 255.0 # Normalize pixel values to [0, 1]
     image_array = np.expand_dims(image_array, axis=0)  # Add batch dimension
     return image_array
+
+
+# Serve static files
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+# Add a route for the favicon
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon():
+    return FileResponse("static/favicon.ico") # type: ignore  
+
+
 
 
 # Crop Disease Prediction Route
@@ -113,9 +135,7 @@ async def recommend_crop(data: dict):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-if __name__ == '__main__':
-    import uvicorn # type: ignore
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+
 
 
 
