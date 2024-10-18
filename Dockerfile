@@ -14,11 +14,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Copy the templates and static directories into the container
-COPY templates/ templates/
-COPY static/ static/
+# COPY templates/ templates/
+# COPY static/ static/
 
 # Expose the port the app runs on
-EXPOSE 5000
+EXPOSE 8000
 
 # Define the command to run the application
-CMD ["python", "app.py"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
